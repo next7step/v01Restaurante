@@ -1,0 +1,22 @@
+# Valida o cadastro (config.js e produtos.js) a cada envio e pull request.
+# Um "X" vermelho no commit indica erro no cardápio; veja o log da execução.
+name: Validar cardápio
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validar produtos, preços, fotos e links
+        run: node ferramentas/validar-cardapio.js

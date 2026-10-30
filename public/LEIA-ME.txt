@@ -1,0 +1,38 @@
+NEX7STEP — PROTÓTIPO 3
+ABRIR: index.html na raiz após extrair o ZIP. Página principal: public/pages/index.html.
+Estrutura reorganizada para GitHub Pages. Não exige Node, banco ou conexão para consultar.
+
+PERSONALIZAR
+js/config.js: nome, logo, cores, endereço, horários, contatos e URLs.
+js/produtos.js: categorias, produtos, ingredientes, preços, variantes e disponibilidade.
+Para trocar um produto, mantenha seu ID apenas se continuar sendo o mesmo item.
+Use IDs únicos e permanentes para cada produto e variante.
+css/style.css: estilos originais e melhorias V2 ao final.
+js/app.js: busca e modal. js/melhorias.js: configuração, lista, tamanhos e ampliação.
+
+LISTA PARA O GARÇOM
+Abra um produto, escolha tamanho e quantidade e guarde na lista.
+A lista fica neste navegador por até 24 horas quando o armazenamento local está disponível.
+Sem armazenamento, funciona só durante a sessão. Não envia, reserva ou cobra pedidos.
+Estimativa exclui itens indisponíveis e taxas; confirme com o garçom.
+
+PUBLICAÇÃO E QR
+O pacote não configura domínio nem hospedagem.
+Publique o conteúdo completo da pasta nex7step, incluindo o index.html da raiz.
+Preencha siteUrl em config.js com a URL definitiva e gere um QR para esse endereço.
+O arquivo assets/qr-exemplo.svg, quando incluído, aponta para https://example.com/cardapio.
+É SOMENTE UMA AMOSTRA. Não imprimir para clientes.
+Alterar siteUrl não regenera o QR automaticamente. Gere outro QR ao mudar o endereço.
+Mantenha a mesma URL ao atualizar os arquivos e teste com a câmera antes de imprimir.
+
+DADOS DEMONSTRATIVOS
+Fotos ilustrativas de Unsplash. WebP otimizadas em uso; JPGs originais preservados.
+Substitua fotos por imagens dos produtos reais. Confira ingredientes, alergênicos,
+preços, disponibilidade, porções e horários com o estabelecimento antes de vender.
+Contatos sem URL são texto; links reais são ativados ao preencher config.js.
+Horários cadastrados são informativos; não há cálculo automático de aberto/fechado.
+O crédito de desenvolvimento nex7step permanece ao trocar o nome do restaurante.
+
+ATUALIZAÇÕES
+Nesta versão, vocês editam e republicam os arquivos. Um painel de edição pelo
+restaurante requer integração futura. Tudo continua apenas front-end na public.

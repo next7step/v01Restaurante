@@ -1,0 +1,1482 @@
+/* ==========================================================================
+   Cardápio digital — folha de estilos
+   Organização:
+     1. Tokens (cores e medidas reutilizadas)
+     2. Base
+     3. Utilitários
+     4. Cabeçalho e navegação
+     5. Hero
+     6. Botões
+     7. Catálogo: busca, categorias, filtros
+     8. Cards de produto
+     9. Avisos do catálogo
+    10. Rodapé
+    11. Diálogos: produto, foto ampliada, lista e informações
+    12. Lista flutuante e aviso (toast)
+    13. Responsivo (desktop → celular)
+   ========================================================================== */
+
+/* 1. Tokens ---------------------------------------------------------------
+   --page-bg, --ink e --accent são trocados por js/config.js (restaurante.cores).
+   Os demais são a paleta fixa do layout: altere aqui para mudar em todo o site. */
+:root {
+  --page-bg: #faf9f6;
+  --ink: #191919;
+  --accent: #191919;
+
+  --preto: #191919;
+  --grafite: #171717;
+  --branco: #fff;
+  --borda: #deddd9;
+  --borda-card: #e8e6e0;
+  --linha: #ddd;
+  --campo: #ccc;
+  --texto-suave: #666;
+  --texto-apoio: #777;
+  --foco: #88764e;
+
+  --gutter: 6%;
+  --largura-max: 1400px;
+  --toque: 44px; /* área mínima de toque */
+
+  /* Seta ↗: traço fino para texto normal, forte para texto em negrito. */
+  --seta-fina: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23000' stroke-width='1.4'%3E%3Cpath d='M1.5 10.5 10.5 1.5M3 1.5h7.5V9'/%3E%3C/svg%3E");
+  --seta-forte: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23000' stroke-width='2'%3E%3Cpath d='M1.5 10.5 10.5 1.5M3 1.5h7.5V9'/%3E%3C/svg%3E");
+}
+
+/* 2. Base ----------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+  overscroll-behavior-y: none; /* sem "puxar" além do rodapé */
+}
+body {
+  margin: 0;
+  background: var(--page-bg);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+}
+button,
+input,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+input {
+  font: inherit;
+}
+button,
+a {
+  touch-action: manipulation;
+}
+button {
+  cursor: pointer;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 4px;
+}
+h2 {
+  font-size: 37px;
+  letter-spacing: -1.8px;
+  margin: 10px 0 0;
+}
+h2 span {
+  color: #969086;
+}
+
+/* 3. Utilitários ---------------------------------------------------------- */
+/* Seta ↗ desenhada em SVG e pintada com a cor do texto (currentColor).
+   O caractere ↗ vira emoji azul em vários celulares. */
+.seta {
+  display: inline-block;
+  width: 0.62em;
+  height: 0.62em;
+  vertical-align: -0.02em;
+  background-color: currentColor;
+  -webkit-mask: var(--seta-fina) center / contain no-repeat;
+  mask: var(--seta-fina) center / contain no-repeat;
+}
+.logo .seta,
+.primary .seta,
+strong .seta {
+  -webkit-mask-image: var(--seta-forte);
+  mask-image: var(--seta-forte);
+}
+[hidden] {
+  display: none !important;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+.skip {
+  position: absolute;
+  left: 10px;
+  top: -80px;
+  background: var(--branco);
+  padding: 15px;
+  z-index: 20;
+}
+.skip:focus {
+  top: 10px;
+}
+body.modal-open {
+  overflow: hidden;
+}
+.eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.3px;
+  color: var(--texto-suave);
+}
+.fineprint {
+  font-size: 11px !important;
+  color: var(--texto-apoio);
+  line-height: 1.6;
+}
+
+/* 4. Cabeçalho e navegação ------------------------------------------------ */
+header {
+  height: 94px;
+  padding: 0 var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--branco);
+  border-bottom: 1px solid #e6e5e2;
+  position: relative;
+  z-index: 5;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: -1px;
+}
+.logo {
+  background: var(--accent);
+  color: var(--branco);
+  width: 47px;
+  height: 47px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  border-radius: 12px;
+  letter-spacing: -3px;
+}
+.logo .seta {
+  font-size: 20px;
+  width: 0.62em;
+  height: 0.62em;
+  margin: -0.62em 0 0 2px;
+}
+.custom-logo {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+}
+.brand small {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 2px;
+  margin-top: 5px;
+  font-weight: 500;
+}
+.head-right {
+  display: flex;
+  align-items: center;
+  gap: 27px;
+}
+.demo {
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  color: #686868;
+}
+#navigation {
+  position: absolute;
+  right: var(--gutter);
+  top: 80px;
+  background: var(--branco);
+  padding: 14px;
+  border: 1px solid var(--linha);
+  box-shadow: 0 12px 35px #0001;
+  border-radius: 12px;
+  min-width: 240px;
+}
+#navigation a,
+#navigation button {
+  display: block;
+  padding: 13px;
+  text-align: left;
+  border: 0;
+  background: none;
+  width: 100%;
+  font-size: 14px;
+}
+#navigation a:hover,
+#navigation button:hover {
+  background: #f4f4f1;
+  border-radius: 6px;
+}
+
+/* 5. Hero ----------------------------------------------------------------- */
+.hero {
+  max-width: var(--largura-max);
+  margin: auto;
+  padding: 30px var(--gutter) 22px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  position: relative;
+}
+.hero-copy {
+  align-self: center;
+  padding: 20px 0;
+}
+.hero h1 {
+  font-size: clamp(42px, 5vw, 65px);
+  line-height: 1.04;
+  letter-spacing: -4px;
+  margin: 24px 0;
+}
+.hero h1 em {
+  font-family: Georgia, serif;
+  font-weight: 400;
+}
+.hero p {
+  color: #656565;
+  line-height: 1.8;
+  font-size: 15px;
+  margin-bottom: 27px;
+}
+.hero-note {
+  display: block;
+  font-size: 10px;
+  margin-top: 18px;
+  color: #737373;
+}
+.hero-photo {
+  height: 340px;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  background: var(--linha);
+}
+.hero-photo img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.hero-photo:after {
+  content: "";
+  position: absolute;
+  inset: 55% 0 0;
+  background: linear-gradient(transparent, #0009);
+}
+.photo-label {
+  position: absolute;
+  bottom: 25px;
+  left: 25px;
+  right: 25px;
+  color: var(--branco);
+  font-size: 10px;
+  letter-spacing: 2px;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.photo-label .seta {
+  font-size: 25px;
+  margin: 0.29em 0;
+}
+.hero-number {
+  grid-column: 1/-1;
+  text-align: right;
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--texto-apoio);
+}
+.restaurant-info {
+  border: 0;
+  border-bottom: 1px solid #bbb;
+  background: none;
+  padding: 10px 0;
+  font-size: 11px;
+  margin-top: 6px;
+  min-height: var(--toque);
+}
+
+/* 6. Botões --------------------------------------------------------------- */
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  background: var(--accent);
+  color: var(--branco);
+  border: none;
+  border-radius: 7px;
+  padding: 17px 22px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.primary .seta {
+  font-size: 20px;
+  margin: 0.29em 0; /* mantém a altura de linha que a seta em texto tinha */
+}
+.primary:disabled {
+  background: #e3e1db;
+  color: #555;
+  cursor: not-allowed;
+}
+.icon-button {
+  border: 1px solid #e1e1de;
+  background: var(--branco);
+  border-radius: 50%;
+  height: var(--toque);
+  width: var(--toque);
+  font-size: 21px;
+  color: var(--preto);
+}
+
+/* 7. Catálogo: busca, categorias, filtros --------------------------------- */
+.catalog {
+  max-width: var(--largura-max);
+  margin: auto;
+  padding: 32px var(--gutter) 64px;
+}
+.catalog-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 22px;
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--borda);
+  padding: 0 15px;
+  border-radius: 8px;
+  background: var(--branco);
+  width: 320px;
+  height: 48px;
+}
+.search span {
+  font-size: 26px;
+}
+.search input {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: none;
+  font-size: 12px;
+}
+.categories {
+  display: flex;
+  gap: 9px;
+  overflow-x: auto;
+  padding: 14px 0;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--borda);
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background: var(--page-bg);
+}
+.categories::-webkit-scrollbar {
+  display: none;
+}
+.categories button,
+.subfilters button {
+  border: 1px solid var(--borda);
+  background: transparent;
+  padding: 12px 19px;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-size: 12px;
+  color: #555;
+  min-height: var(--toque);
+}
+.categories button[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--preto);
+  color: var(--branco);
+}
+.subfilters {
+  display: flex;
+  gap: 8px;
+  overflow: auto;
+  padding-top: 16px;
+}
+.subfilters button {
+  padding: 8px 13px;
+  font-size: 11px;
+}
+.subfilters button[aria-pressed="true"] {
+  background: #e8e6e0;
+  color: var(--grafite);
+}
+.results-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 21px 0;
+  font-size: 12px;
+  color: #6b6b6b;
+}
+.results-heading p {
+  margin: 0;
+}
+.results-heading span {
+  font-size: 10px;
+  white-space: nowrap;
+}
+.catalog-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  margin-bottom: 15px;
+}
+.diet-filter {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+  min-height: var(--toque);
+}
+.diet-filter input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+.catalog-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.sort select {
+  font: inherit;
+  min-width: 0;
+  min-height: var(--toque);
+  padding: 0 10px;
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  background: var(--branco);
+  color: var(--preto);
+}
+.view-toggle {
+  display: flex;
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.view-toggle button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--toque);
+  min-width: var(--toque);
+  justify-content: center;
+  padding: 0 14px;
+  border: 0;
+  background: transparent;
+  font-size: 12px;
+  color: #555;
+}
+.view-toggle button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--branco);
+}
+.view-toggle button:focus-visible,
+.sort select:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+}
+
+/* 8. Cards de produto ----------------------------------------------------- */
+.products {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px 18px;
+}
+.product {
+  background: var(--branco);
+  border: 1px solid var(--borda-card);
+  border-radius: 11px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 0;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  color: var(--preto);
+}
+.product:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px #0000000b;
+}
+.product-photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.25;
+  overflow: hidden;
+  background: var(--linha);
+}
+.product img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.product:hover img {
+  transform: scale(1.045);
+}
+.product:has(.unavailable) .product-photo {
+  filter: grayscale(0.7);
+}
+.badge {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  background: #fffef8;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.9px;
+}
+.product-copy {
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+}
+.product-category {
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--texto-apoio);
+}
+.product h3 {
+  font-size: 16px;
+  letter-spacing: -0.4px;
+  margin: 9px 0;
+}
+.product p {
+  font-size: 12px;
+  color: #707070;
+  line-height: 1.7;
+  margin: 0 0 19px;
+}
+.unavailable,
+.vegetarian-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.5;
+  border-radius: 4px;
+  padding: 5px 7px;
+  background: #efeeeb;
+  margin-bottom: 9px;
+}
+.unavailable {
+  border: 1px dashed #999;
+}
+.portion {
+  font-size: 10px;
+  color: var(--texto-suave);
+  margin: 0 0 13px;
+}
+.price-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  margin-top: auto;
+}
+.price {
+  font-size: 16px;
+  font-weight: 700;
+}
+.price small {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+.old-price {
+  display: block;
+  font-size: 10px;
+  color: var(--texto-apoio);
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+.card-arrow {
+  border: 1px solid var(--linha);
+  border-radius: 50%;
+  width: 31px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+}
+/* Visualização em lista: foto à esquerda, texto à direita. */
+.products.is-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+}
+.is-list .product {
+  flex-direction: row;
+}
+.is-list .product-photo {
+  width: 34%;
+  max-width: 180px;
+  min-height: 130px;
+  aspect-ratio: auto;
+  flex-shrink: 0;
+}
+.is-list .product p {
+  margin-bottom: 12px;
+}
+/* A altura do card vem do texto; a foto apenas preenche. */
+.is-list .product img {
+  position: absolute;
+  inset: 0;
+}
+
+/* 9. Avisos do catálogo --------------------------------------------------- */
+.service-note {
+  margin-top: 32px;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.service-note > .seta {
+  font-size: 25px;
+  margin: 0.29em 0;
+  flex-shrink: 0;
+}
+.service-note p {
+  font-size: 12px;
+  color: var(--texto-apoio);
+  line-height: 1.7;
+  margin: 0;
+}
+.service-note strong {
+  color: #333;
+}
+#empty {
+  text-align: center;
+  padding: 50px 10px;
+}
+#empty p {
+  color: var(--texto-suave);
+}
+
+/* 10. Rodapé -------------------------------------------------------------- */
+.footer-top {
+  padding: 44px var(--gutter);
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 30px;
+  background: var(--grafite);
+  color: white;
+}
+.footer-brand .logo {
+  background: var(--branco);
+  color: var(--grafite);
+}
+/* Precisa vir depois de .brand: mesmo peso de seletor. */
+.footer-brand {
+  font-size: 25px;
+}
+.footer-brand small {
+  font-size: 6px;
+  letter-spacing: 1.4px;
+}
+.footer-top p {
+  color: #bbb;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.footer-top h3 {
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0 0 15px;
+}
+.footer-top small,
+.demo-label {
+  font-size: 10px;
+  color: #aaa;
+}
+.footer-top a:not(.brand) {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.footer-info {
+  border: 0;
+  border-bottom: 1px solid var(--texto-suave);
+  background: none;
+  color: #eee;
+  font-size: 11px;
+  padding: 10px 0;
+  min-height: var(--toque);
+}
+.footer-bottom {
+  background: var(--grafite);
+  border-top: 1px solid #363636;
+  color: #aaa;
+  /* Espaço inferior para o botão “Minha lista” não cobrir o texto. */
+  padding: 20px var(--gutter) 84px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+}
+.footer-bottom strong {
+  color: #eee;
+}
+
+/* 11. Diálogos ------------------------------------------------------------ */
+dialog {
+  border: 0;
+  padding: 0;
+  border-radius: 16px;
+  max-width: 800px;
+  width: calc(100% - 40px);
+  max-height: 90dvh;
+  overflow: auto;
+  background: var(--page-bg);
+  color: var(--preto);
+}
+dialog::backdrop {
+  background: #0009;
+  backdrop-filter: blur(5px);
+}
+/* Precisa vir depois de .icon-button: mesmo peso de seletor. */
+.close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  z-index: 2;
+  font-size: 28px;
+  box-shadow: 0 2px 12px #0002;
+}
+
+/* Produto */
+.modal-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+}
+.modal-media {
+  position: relative;
+}
+.modal-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 470px;
+  max-height: 750px;
+  object-fit: cover;
+}
+.gallery-thumbs {
+  position: absolute;
+  left: 15px;
+  bottom: 15px;
+  display: flex;
+  gap: 8px;
+}
+.gallery-thumbs button {
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 2px solid var(--branco);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--linha);
+  box-shadow: 0 2px 12px #0002;
+  opacity: 0.7;
+}
+.gallery-thumbs button[aria-current="true"] {
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--preto);
+}
+.gallery-thumbs img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.enlarge {
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  min-height: var(--toque);
+  padding: 10px 13px;
+  border: 0;
+  border-radius: 25px;
+  background: var(--branco);
+  color: #222;
+  box-shadow: 0 2px 12px #0002;
+  font-size: 12px;
+}
+.modal-copy {
+  padding: 50px 28px 28px;
+  overflow-wrap: anywhere;
+}
+.modal-copy h2 {
+  font-size: 31px;
+  margin: 12px 0 18px;
+}
+.modal-copy p {
+  font-size: 13px;
+  color: var(--texto-suave);
+  line-height: 1.8;
+}
+.modal-copy h3 {
+  font-size: 12px;
+  margin-top: 25px;
+}
+.modal-copy .price {
+  display: block;
+  font-size: 26px;
+}
+.modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0;
+}
+.modal-meta span {
+  padding: 8px;
+  background: #eeece7;
+  border-radius: 5px;
+  font-size: 10px;
+}
+.allergens {
+  border-top: 1px solid var(--linha);
+  padding-top: 15px;
+  font-size: 11px !important;
+}
+.modal-note {
+  background: #eceae4;
+  padding: 13px;
+  border-radius: 6px;
+  font-size: 11px !important;
+}
+
+/* Escolha de tamanho e quantidade */
+.choice-block {
+  border-top: 1px solid var(--linha);
+  padding-top: 18px;
+  margin-top: 16px;
+}
+.choice-block > label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.choice-block select {
+  width: 100%;
+  font: inherit;
+  font-size: 13px;
+  border: 1px solid var(--campo);
+  border-radius: 6px;
+  padding: 13px 10px;
+  background: var(--branco);
+  color: var(--preto);
+  min-height: 46px;
+}
+.choice-actions {
+  display: flex;
+  gap: 10px;
+  margin: 14px 0;
+  align-items: end;
+}
+.choice-actions label {
+  font-size: 10px;
+  width: 80px;
+}
+.choice-actions input {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 11px;
+  border: 1px solid var(--campo);
+  border-radius: 6px;
+  min-height: 45px;
+}
+.choice-actions .primary {
+  flex: 1;
+  justify-content: center;
+  padding: 14px 9px;
+  font-size: 12px;
+  min-height: 46px;
+}
+
+/* Foto ampliada */
+#zoom-dialog {
+  max-width: 1100px;
+  background: #151515;
+}
+#zoom-image {
+  display: block;
+  width: 100%;
+  max-height: 90dvh;
+  object-fit: contain;
+}
+#zoom-dialog:has(.zoom-nav:not([hidden])) #zoom-image {
+  max-height: calc(90dvh - 70px);
+}
+.zoom-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px;
+  color: var(--branco);
+  font-size: 13px;
+}
+.zoom-nav .icon-button {
+  font-size: 26px;
+  line-height: 1;
+}
+
+/* Lista e informações (os dois usam .about-copy) */
+.about-copy {
+  padding: 55px 30px 35px;
+}
+.about-copy p {
+  line-height: 1.8;
+  color: var(--texto-suave);
+}
+.list-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 15px;
+  border-bottom: 1px solid var(--linha);
+  padding: 20px 0;
+}
+.list-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.list-item h3 {
+  font-size: 16px;
+  margin: 0;
+}
+.list-item p {
+  font-size: 12px;
+  margin: 6px 0;
+}
+.list-item strong {
+  font-size: 14px;
+}
+.quantity-actions {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.quantity-actions button,
+.secondary {
+  border: 1px solid var(--campo);
+  background: var(--branco);
+  color: #222;
+  border-radius: 6px;
+  min-width: var(--toque);
+  min-height: var(--toque);
+  padding: 9px 12px;
+}
+.quantity-actions .remove-choice {
+  font-size: 11px;
+  border: 0;
+  background: none;
+  text-decoration: underline;
+}
+.empty-list {
+  text-align: center;
+  padding: 35px 0;
+}
+.empty-list > span {
+  font-size: 40px;
+}
+.empty-list h3 {
+  font-size: 18px;
+}
+#list-total {
+  font-size: 16px;
+  font-weight: bold;
+}
+/* Mantido depois das regras da lista: hoje ele também define o tamanho
+   de .list-item h3 e .empty-list h3 (mesmo peso de seletor). */
+.about-copy h3 {
+  font-size: 14px;
+  margin-top: 24px;
+}
+.about-copy a {
+  text-decoration: underline;
+  line-height: 2;
+}
+.hours {
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  color: #555;
+  line-height: 2;
+}
+.info-demo {
+  padding: 12px;
+  background: #eeece6;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* 12. Lista flutuante e aviso (toast) ------------------------------------- */
+.list-fab {
+  position: fixed;
+  bottom: 18px;
+  right: var(--gutter);
+  z-index: 7;
+  border: 0;
+  padding: 15px 20px;
+  border-radius: 30px;
+  box-shadow: 0 5px 25px #0003;
+  font-size: 14px;
+  background: var(--accent);
+  color: var(--branco);
+}
+.list-fab span {
+  background: white;
+  color: var(--grafite);
+  padding: 4px 8px;
+  border-radius: 30px;
+  margin-left: 12px;
+}
+/* Sobre o rodapé escuro, o botão se inverte como o logo do rodapé. */
+.list-fab {
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+.list-fab.sobre-rodape {
+  background: var(--branco);
+  color: var(--grafite);
+}
+.list-fab.sobre-rodape span {
+  background: var(--grafite);
+  color: var(--branco);
+}
+.toast {
+  position: fixed;
+  bottom: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #202020;
+  color: var(--branco);
+  padding: 14px 20px;
+  border-radius: 10px;
+  z-index: 30;
+  font-size: 13px;
+  width: max-content;
+  max-width: 90vw;
+  opacity: 0;
+  pointer-events: none;
+}
+.toast.visible {
+  opacity: 1;
+}
+
+/* 13. Responsivo ---------------------------------------------------------- */
+
+/* Desktop */
+@media (min-width: 901px) {
+  .hero-photo {
+    height: 395px;
+  }
+  .hero h1 {
+    font-size: clamp(48px, 5.6vw, 74px);
+  }
+  header .brand {
+    font-size: 28px;
+  }
+  header .logo,
+  header .custom-logo {
+    width: 50px;
+    height: 50px;
+  }
+  header .brand small {
+    font-size: 9px;
+  }
+}
+@media (min-width: 1500px) {
+  header {
+    padding-left: calc((100% - 1232px) / 2);
+    padding-right: calc((100% - 1232px) / 2);
+  }
+}
+
+/* Tablet */
+@media (max-width: 1000px) {
+  .products {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .hero h1 {
+    letter-spacing: -2.5px;
+  }
+  .hero {
+    gap: 24px;
+  }
+}
+
+/* Celular */
+@media (max-width: 650px) {
+  html {
+    scroll-padding-top: 15px;
+  }
+
+  /* Cabeçalho */
+  header {
+    height: 76px;
+    padding: 0 var(--gutter);
+  }
+  .brand {
+    font-size: 23px;
+    gap: 10px;
+  }
+  .logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 21px;
+  }
+  .logo .seta {
+    font-size: 17px;
+  }
+  .brand small {
+    font-size: 7px;
+    letter-spacing: 1.8px;
+  }
+  .demo {
+    display: none;
+  }
+  #navigation {
+    top: 65px;
+  }
+
+  /* Hero: mesma composição do desktop, empilhada (texto, depois foto) */
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding-top: 28px;
+    padding-bottom: 8px;
+  }
+  .hero-copy {
+    padding: 0;
+  }
+  .eyebrow {
+    font-size: 8px;
+    letter-spacing: 1.8px;
+  }
+  .hero .eyebrow,
+  .hero-note,
+  .hero-number {
+    display: none;
+  }
+  .hero h1 {
+    font-size: 44px;
+    letter-spacing: -2px;
+    line-height: 1.02;
+    margin: 0 0 16px;
+  }
+  .hero p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 22px;
+  }
+  .hero .primary {
+    padding: 15px 20px;
+    gap: 28px;
+  }
+  .restaurant-info {
+    display: block;
+    font-size: 12px;
+    margin: 10px 0 0;
+    padding: 8px 0;
+  }
+  .hero-photo {
+    height: 220px;
+    border-radius: 12px;
+  }
+  .hero-photo img {
+    object-position: 50% 55%;
+  }
+  .photo-label {
+    bottom: 18px;
+    left: 20px;
+    right: 20px;
+    font-size: 9px;
+  }
+  .photo-label .seta {
+    font-size: 20px;
+  }
+
+  /* Catálogo */
+  .catalog {
+    padding-top: 15px;
+    padding-bottom: 35px;
+  }
+  .catalog-head {
+    display: block;
+  }
+  h2 {
+    font-size: 31px;
+    margin-top: 7px;
+    letter-spacing: -1px;
+  }
+  .search {
+    margin-top: 21px;
+    width: 100%;
+    height: 45px;
+  }
+  .categories {
+    margin-left: -6.8%;
+    margin-right: -6.8%;
+    padding-left: 6.8%;
+    padding-right: 6.8%;
+    width: 113.6%;
+  }
+  .categories button {
+    padding: 10px 14px;
+    font-size: 11px;
+  }
+  .results-heading {
+    padding: 18px 0;
+    font-size: 10px;
+  }
+  .results-heading span {
+    font-size: 9px;
+  }
+  .catalog-controls {
+    width: 100%;
+  }
+  .sort {
+    flex: 1;
+    min-width: 0;
+  }
+  .sort select {
+    flex: 1;
+  }
+  .view-toggle button {
+    padding: 0 12px;
+  }
+
+  /* Cards */
+  .products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 10px;
+  }
+  .product-photo {
+    aspect-ratio: 1.08;
+  }
+  .product-copy {
+    padding: 12px;
+  }
+  .product h3 {
+    font-size: 15px;
+    line-height: 1.3;
+    margin: 7px 0;
+  }
+  .product p {
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+  .product-category {
+    font-size: 8px;
+    letter-spacing: 0.7px;
+  }
+  .badge {
+    left: 7px;
+    top: 7px;
+    padding: 5px 6px;
+    font-size: 7px;
+    letter-spacing: 0.4px;
+  }
+  .price {
+    font-size: 15px;
+  }
+  .old-price {
+    font-size: 9px;
+  }
+  .card-arrow {
+    width: 26px;
+    height: 26px;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .products.is-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .is-list .product-photo {
+    width: 112px;
+    min-height: 120px;
+  }
+  .service-note {
+    padding: 15px;
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  /* Rodapé */
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    padding: 30px var(--gutter);
+    gap: 27px 18px;
+  }
+  .footer-top > div:first-child {
+    grid-column: 1/-1;
+  }
+  .footer-top h3 {
+    font-size: 11px;
+  }
+  .footer-bottom {
+    gap: 15px;
+    flex-wrap: wrap;
+    font-size: 9px;
+  }
+
+  /* Diálogos abrem como painel inferior */
+  dialog {
+    width: 100%;
+    max-width: none;
+    margin: auto 0 0;
+    border-radius: 20px 20px 0 0;
+    max-height: 94dvh;
+  }
+  .modal-layout {
+    grid-template-columns: 1fr;
+  }
+  .modal-photo {
+    height: 230px;
+    min-height: 0;
+    max-height: none;
+  }
+  .modal-copy {
+    padding: 24px;
+  }
+  .modal-copy h2,
+  .about-copy h2 {
+    font-size: 28px;
+  }
+  .modal-copy p {
+    font-size: 14px;
+  }
+  .modal-meta {
+    margin: 15px 0;
+  }
+  #zoom-dialog {
+    margin: auto;
+    width: 100%;
+    border-radius: 0;
+  }
+  .list-item {
+    grid-template-columns: 64px 1fr;
+    gap: 12px;
+  }
+  .list-item img {
+    height: 64px;
+    width: 64px;
+  }
+  .list-fab {
+    right: 5%;
+    bottom: 15px;
+    font-size: 13px;
+  }
+}
+
+/* Celulares muito estreitos */
+@media (max-width: 350px) {
+  .hero h1 {
+    font-size: 37px;
+  }
+  .hero p br {
+    display: none;
+  }
+  .hero-photo {
+    height: 190px;
+  }
+  .products {
+    gap: 9px;
+  }
+  .product-copy {
+    padding: 10px;
+  }
+  .choice-actions {
+    flex-wrap: wrap;
+  }
+  .choice-actions .primary {
+    min-width: 170px;
+  }
+  /* Rótulos curtos somem da tela, mas continuam para leitores de tela. */
+  .compact-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+  .is-list .product-photo {
+    width: 92px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    transition: none !important;
+  }
+}

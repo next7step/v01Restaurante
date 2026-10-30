@@ -1,0 +1,14 @@
+body {
+  font: 16px Arial;
+  text-align: center;
+  max-width: 500px;
+  margin: 60px auto;
+  padding: 20px;
+}
+img {
+  width: 240px;
+  max-width: 100%;
+}
+p {
+  line-height: 1.7;
+}

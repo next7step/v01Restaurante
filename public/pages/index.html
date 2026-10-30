@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#171717" />
+    <meta
+      name="description"
+      content="Explore o cardápio demonstrativo nex7step: pratos, pizzas, porções e bebidas."
+    />
+    <title>nex7step · Cardápio</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <script defer src="../js/config.js"></script>
+    <script defer src="../js/produtos.js"></script>
+    <script defer src="../js/seguranca.js"></script>
+    <script defer src="../js/app.js"></script>
+    <script defer src="../js/melhorias.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#cardapio">Ir para o cardápio</a>
+    <header>
+      <a class="brand" href="#" aria-label="nex7step, início"
+        ><span class="logo">n7<span class="seta" aria-hidden="true"></span></span
+        ><span>nex7step<small>À MESA, O MELHOR.</small></span></a
+      >
+      <div class="head-right">
+        <span class="demo">CARDÁPIO DEMONSTRATIVO</span
+        ><button
+          id="menu-toggle"
+          class="icon-button"
+          aria-label="Abrir menu"
+          aria-controls="navigation"
+          aria-expanded="false"
+        >
+          ☰
+        </button>
+      </div>
+      <nav id="navigation" hidden>
+        <a href="#cardapio">Explorar cardápio</a
+        ><a href="#informacoes">Informações e contato</a
+        ><button id="about">Sobre este cardápio</button>
+      </nav>
+    </header>
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">FEITO PARA O SEU MOMENTO</span>
+          <h1>
+            Bom gosto.<br />
+            Em cada <em>escolha.</em>
+          </h1>
+          <p>
+            Dos clássicos aos seus novos favoritos.<br />
+            Encontre o sabor que combina com hoje.
+          </p>
+          <a class="primary" href="#cardapio"
+            >Explore o cardápio <span class="seta" aria-hidden="true"></span></a
+          ><span class="hero-note"
+            >Escolha com calma. Peça ao nosso garçom.</span
+          >
+        </div>
+        <div class="hero-photo">
+          <img
+            src="../assets/burger.webp"
+            alt="Hambúrguer artesanal com queijo, vegetais e pão de gergelim"
+            fetchpriority="high"
+          /><span class="photo-label">OS FAVORITOS DA CASA <span class="seta" aria-hidden="true"></span></span>
+        </div>
+        <div class="hero-number">01 / SABORES QUE APROXIMAM</div>
+      </section>
+      <section id="cardapio" class="catalog">
+        <div class="catalog-head">
+          <div>
+            <span class="eyebrow">ESCOLHA O SEU FAVORITO</span>
+            <h2>Nosso cardápio<span>.</span></h2>
+          </div>
+          <label class="search"
+            ><span aria-hidden="true">⌕</span
+            ><input
+              id="search"
+              type="search"
+              placeholder="O que você quer provar?"
+              aria-label="Buscar produtos"
+          /></label>
+        </div>
+        <nav
+          class="categories"
+          aria-label="Categorias de produtos"
+          id="categories"
+        ></nav>
+        <div id="drink-filters" class="subfilters" hidden>
+          <button data-drink="all" aria-pressed="true">Todas as bebidas</button
+          ><button data-drink="sem" aria-pressed="false">Sem álcool</button
+          ><button data-drink="com" aria-pressed="false">Com álcool</button>
+        </div>
+        <div class="results-heading">
+          <p id="result-title">Uma seleção para todos os gostos</p>
+          <span id="result-count" aria-live="polite"></span>
+        </div>
+        <div class="catalog-tools">
+          <label class="diet-filter"
+            ><input type="checkbox" id="vegetarian" /> Mostrar opções
+            vegetarianas</label
+          >
+          <div class="catalog-controls">
+            <label class="sort"
+              ><span class="compact-label">Ordenar</span>
+              <select id="sort">
+                <option value="casa">Sugestão da casa</option>
+                <option value="menor">Menor preço</option>
+                <option value="maior">Maior preço</option>
+              </select></label
+            >
+            <div
+              class="view-toggle"
+              role="group"
+              aria-label="Modo de visualização"
+            >
+              <button data-view="grade" aria-pressed="true">
+                <span aria-hidden="true">▦</span>
+                <span class="compact-label">Grade</span></button
+              ><button data-view="lista" aria-pressed="false">
+                <span aria-hidden="true">☰</span>
+                <span class="compact-label">Lista</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="products" class="products"></div>
+        <div id="empty" hidden>
+          <h3>Nenhum sabor por aqui.</h3>
+          <p>Tente outro nome ou explore todas as categorias.</p>
+          <button id="reset" class="primary">Limpar filtros</button>
+        </div>
+        <div class="service-note">
+          <span class="seta" aria-hidden="true"></span>
+          <p>
+            <strong>Encontrou seu favorito?</strong> Faça seu pedido com o
+            garçom. Ele também pode ajudar com ingredientes e restrições
+            alimentares.
+          </p>
+        </div>
+      </section>
+    </main>
+    <footer id="informacoes">
+      <div class="footer-top">
+        <div>
+          <a class="brand footer-brand" href="#"
+            ><span class="logo">n7<span class="seta" aria-hidden="true"></span></span
+            ><span
+              >nex7step<small>SABORES. ENCONTROS. BONS MOMENTOS.</small></span
+            ></a
+          >
+          <p>Um bom momento começa à mesa.</p>
+          <span class="demo-label">Estabelecimento de demonstração</span>
+        </div>
+        <div>
+          <h3>Onde estamos</h3>
+          <p>Endereço do restaurante<br />Bairro · Cidade / UF</p>
+          <small>Endereço a configurar</small>
+        </div>
+        <div>
+          <h3>Vamos conversar</h3>
+          <p>Instagram · @seu.restaurante<br />WhatsApp · a configurar</p>
+          <small>Contatos de demonstração</small>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> nex7step</span
+        ><span>Design e desenvolvimento por <strong>nex7step <span class="seta" aria-hidden="true"></span></strong></span>
+      </div>
+    </footer>
+    <dialog id="product-dialog" aria-labelledby="modal-title">
+      <button class="close icon-button" aria-label="Fechar detalhes">×</button>
+      <div id="modal-content"></div>
+    </dialog>
+    <dialog id="about-dialog" aria-labelledby="about-title">
+      <button class="close icon-button" aria-label="Fechar informações">
+        ×
+      </button>
+      <div class="about-copy">
+        <span class="eyebrow">NEX7STEP</span>
+        <h2 id="about-title">Seu próximo favorito<br />começa aqui.</h2>
+        <p>
+          Este é um cardápio demonstrativo. Produtos, preços, ingredientes e
+          contatos são exemplos e devem ser adaptados ao estabelecimento.
+        </p>
+        <p>
+          Consulte os detalhes de cada produto e faça seu pedido com o garçom.
+        </p>
+      </div>
+    </dialog>
+    <button id="open-list" class="list-fab" aria-label="Abrir minha lista">
+      ♡ Minha lista <span id="list-count">0</span>
+    </button>
+    <div id="announcement" class="toast" role="status" aria-live="polite"></div>
+    <dialog id="list-dialog" aria-labelledby="list-title">
+      <button class="close icon-button" aria-label="Fechar lista">×</button>
+      <div class="about-copy">
+        <span class="eyebrow">SUAS ESCOLHAS</span>
+        <h2 id="list-title">Para pedir ao garçom</h2>
+        <p>
+          Esta lista não envia pedidos. Mostre suas escolhas ao garçom para
+          confirmar.
+        </p>
+        <div id="list-items"></div>
+        <p id="list-total"></p>
+        <button id="clear-list" class="secondary">Limpar lista</button>
+        <p class="fineprint">
+          Valores estimados, sem taxa de serviço. Disponibilidade e preços devem
+          ser confirmados com a equipe.
+        </p>
+      </div>
+    </dialog>
+    <dialog id="zoom-dialog" aria-labelledby="zoom-title">
+      <button class="close icon-button" aria-label="Fechar foto ampliada">
+        ×
+      </button>
+      <h2 id="zoom-title" class="sr-only">Foto ampliada do produto</h2>
+      <img id="zoom-image" alt="" />
+      <div class="zoom-nav" hidden>
+        <button id="zoom-prev" class="icon-button" aria-label="Foto anterior">
+          ‹</button
+        ><span id="zoom-counter" aria-live="polite"></span
+        ><button id="zoom-next" class="icon-button" aria-label="Próxima foto">
+          ›
+        </button>
+      </div>
+    </dialog>
+    <noscript
+      ><p>
+        Ative o JavaScript para visualizar os produtos e seus detalhes.
+      </p></noscript
+    >
+  </body>
+</html>
